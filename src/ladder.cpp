@@ -51,7 +51,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
     int column = str1.size() + 1;
     int row = str2.size() + 1;
     if (abs(column - row) > d) return false;
-    vector<int> current(column), previous(column);
+    vector<int> current, previous;
     for (int size = 0; size < column; ++size) {
         current.push_back(size);
         previous = current;
