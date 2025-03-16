@@ -51,25 +51,41 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
     int column = str1.size() + 1;
     int row = str2.size() + 1;
     if (abs(column - row) > d) return false;
-    vector<int> current, previous;
+    vector<int> previous(column);
+    int current;
     for (int size = 0; size < column; ++size) {
-        current.push_back(size);
-        previous = current;
+        previous[size] = size;
+        // cout << previous[size] << endl;
+        // previous = current;
     }
+    // cout << endl;
     for (int i = 1; i < row; ++i) {
         for (int j = 0; j < column; ++j) {
             if (j == 0) {
-                current[j] = previous[j] + 1;
+                current = previous[j] + 1;
+                // cout << current << " ";
                 continue;
             }
-            if (str1[j - 1] == str2[i - 1]) current[j] = previous[j - 1];
-            else { 
-                current[j] = (min(min(previous[j], current[j - 1]), previous[j - 1])) + 1; 
+            // cout << str1[j - 1] << " " << str2[i - 1] << endl;
+            if (str1[j - 1] == str2[i - 1]) { 
+                int temp = current;
+                current = previous[j - 1];
+                previous[j - 1] = temp;
             }
+            else { 
+                // cout << "Inf: " << previous[j] << " " << current << " " << previous[j - 1] << endl;
+                int temp = current;
+                current = (min(min(previous[j], current), previous[j - 1])) + 1; 
+                previous[j - 1] = temp;
+                // cout << "Prev: " << previous[j - 1];
+            }
+            // cout << current << " ";
         }
-        swap(current, previous);
+        // cout << endl;
+        // swap(current, previous);
     }
-    return previous[column - 1] <= d; 
+    // cout << "Val: " << current << endl;
+    return current <= d; 
 }
 
 void load_words(set<string> & word_list, const string& file_name) {

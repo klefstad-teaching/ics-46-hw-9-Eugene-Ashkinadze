@@ -19,8 +19,8 @@ vector<int> dijkstra_shortest_path(Graph& G, int source, vector<int>& previous) 
             for (Edge &e : G[tmp] ) {
                 int vertex = e.dst;
                 int weight = e.weight;
-                // if (!G.visited[vertex] && G.distances[tmp] + weight < G.distances[vertex]) {
-                if (G.distances[tmp] + weight < G.distances[vertex]) {
+                if (!G.visited[vertex] && G.distances[tmp] + weight < G.distances[vertex]) {
+                //if (G.distances[tmp] + weight < G.distances[vertex]) {
                     G.distances[vertex] = G.distances[tmp] + weight;
                     previous[vertex] = tmp;
                     priorityq.push(Vertex{vertex, G.distances[vertex]});
@@ -35,8 +35,7 @@ vector<int> dijkstra_shortest_path(Graph& G, int source, vector<int>& previous) 
 vector<int> extract_shortest_path(const vector<int>& distances, const vector<int>& previous, int destination) {
     stack<int> path;
     vector<int> result;
-    // int parent = previous[destination];
-    int parent = destination;
+    int parent = previous[destination];
     path.push(destination);
     while (parent >= 0) {
         path.push(parent);
