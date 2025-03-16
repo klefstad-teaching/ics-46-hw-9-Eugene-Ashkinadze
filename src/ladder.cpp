@@ -51,8 +51,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
     int column = str1.size() + 1;
     int row = str2.size() + 1;
     if (abs(column - row) > d) return false;
-    vector<int> current, previous;
-    //creates previous row when first starting 
+    vector<int> current(column), previous(column);
     for (int size = 0; size < column; ++size) {
         current.push_back(size);
         previous = current;
@@ -63,27 +62,13 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
                 current[j] = previous[j] + 1;
                 continue;
             }
-            // cout << "B: " << str1[j - 1] << " " << str2[i - 1] << endl;
             if (str1[j - 1] == str2[i - 1]) current[j] = previous[j - 1];
             else { 
-                // cout << "Data: " << current[j] << " " << current[j - 1] << " " << previous[j - 1] << endl;
-                // cout << j << endl;
                 current[j] = (min(min(previous[j], current[j - 1]), previous[j - 1])) + 1; 
             }
-            // else if (j + 1 < column) current[j] = min(min(current[j], current[j+1]), previous[j+1]) + 1; 
         }
-        // cout << "Prev: i is " << i << endl;
-        // cout << endl;
         swap(current, previous);
-        // for (auto c : previous) {
-        //     cout << c << " ";
-        // } 
     }
-    // for (auto c : previous) {
-    //         cout << c << " ";
-    // } 
-    // cout << endl;
-    // cout << "Current val is: " << previous[column - 1] << endl;
     return previous[column - 1] <= d; 
 }
 
