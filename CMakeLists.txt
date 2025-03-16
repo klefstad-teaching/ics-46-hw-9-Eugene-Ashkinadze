@@ -7,8 +7,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(DIJKSTRAS_SRC_FILES
-  src/dijkstras.h
-  src/dijkstras.cpp
+  ./src/dijkstras.h
+  ./src/dijkstras.cpp
 )
 
 add_executable(dijkstra_main

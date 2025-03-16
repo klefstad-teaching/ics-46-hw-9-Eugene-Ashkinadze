@@ -9,30 +9,38 @@
 #include "ladder.h"
 using namespace std; 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
-    vector<string> first_word; 
+   vector<string> empty_vec;
+   if (begin_word == end_word) return empty_vec;
     queue<vector<string>> ladder_queue;
-    first_word.push_back(begin_word);
-    ladder_queue.push(first_word);
+    vector<string> word_graph;
+    word_graph.push_back(begin_word);
+    ladder_queue.push(word_graph);
     set<string> visited;
     visited.insert(begin_word);
-    while (!ladder_queue.empty()) {
-        vector<string> ladder = ladder_queue.front();
+
+    while(!ladder_queue.empty()){
+        word_graph = ladder_queue.front();
         ladder_queue.pop();
-        string last_word = ladder.back();
-        for (string word : word_list) {
-            if (is_adjacent(last_word, word)) {
-                visited.insert(word);
-                vector<string> new_ladder;
-                new_ladder = ladder;
-                new_ladder.push_back(word);
-                if (word == end_word) return new_ladder;
-                ladder_queue.push(new_ladder);
+        string last = word_graph.back();
+        // cout << "Last: " << last << endl;
+        for (const string &word: word_list) {
+            // cout << word << endl;
+            // cout << is_adjacent(last, word) << endl;
+            if (is_adjacent(last, word)){
+                if (!visited.contains(word)) {
+                    visited.insert(word);
+                    vector<string> new_word_graph = word_graph;
+                    new_word_graph.push_back(word);
+                    if (word == end_word) {
+                        return new_word_graph;
+                    }
+                    ladder_queue.push(new_word_graph);
+                }
             }
         }
     }
-    //Fix this 
-    vector<string> empty_vecpt;
-    return empty_vecpt;
+
+   return empty_vec;
 }
 
 bool is_adjacent(const string& word1, const string& word2) {
@@ -40,44 +48,78 @@ bool is_adjacent(const string& word1, const string& word2) {
 }
 
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
-    int str1_size = str1.size() + 1;
-    int str2_size = str2.size() + 1;
-    //if (str1_size > str2_size + d || str1_size < str2_size + d) return false;
-    vector<int> prev;
-    vector<int> current_row; 
-    for (int i = 0; i < str2_size; ++i) {
-        if (prev.size() == 0) {
-            for (int m = 0; m < str1_size; ++m) {
-                current_row.push_back(m);
-              // cout << "Added to Prev" << endl;
-            }
-            prev = current_row;
-            //cout << "Prev set" << endl;
-            continue;
-        }
-        for (int j = 0; j < str1_size; ++j) {
-            int t = j - 1;
-            if (t >= 0 && (t < str1_size - 1) && (t < str2_size - 1) && str1[t] == str2[t]) {
-                current_row[j] = prev[j - 1];
-                //cout << "IS EQUAL" << endl;
+    int column = str1.size() + 1;
+    int row = str2.size() + 1;
+    if (abs(column - row) > d) return false;
+    vector<int> current, previous;
+    //creates previous row when first starting 
+    for (int size = 0; size < column; ++size) {
+        current.push_back(size);
+        previous = current;
+    }
+    for (int i = 1; i < row; ++i) {
+        for (int j = 0; j < column; ++j) {
+            if (j == 0) {
+                current[j] = previous[j] + 1;
                 continue;
             }
-            current_row[j] = prev[j];
-            if (j >= 1 && current_row[j] > prev[t]) current_row[j] = prev[t];
-            else if ((j < (str1_size - 1) && current_row[j] > prev[j + 1])) current_row[j] = prev[j + 1];
-           // cout << "Outside the loop" << endl;
+            // cout << "B: " << str1[j - 1] << " " << str2[i - 1] << endl;
+            if (str1[j - 1] == str2[i - 1]) current[j] = previous[j - 1];
+            else { 
+                // cout << "Data: " << current[j] << " " << current[j - 1] << " " << previous[j - 1] << endl;
+                // cout << j << endl;
+                current[j] = (min(min(previous[j], current[j - 1]), previous[j - 1])) + 1; 
+            }
+            // else if (j + 1 < column) current[j] = min(min(current[j], current[j+1]), previous[j+1]) + 1; 
         }
-        swap(prev, current_row);
-        //cout << "AfterSwap" << endl;
-        // cout << "Min value is" << prev[(str1_size - 1)] << endl;
-        // if (prev[(str2_size - 1)] > d) return false;
-        //cout << "Current i is " << i << endl;
-        //cout << "Last value is" << prev[str1_size - 1] << endl;
+        // cout << "Prev: i is " << i << endl;
+        // cout << endl;
+        swap(current, previous);
+        // for (auto c : previous) {
+        //     cout << c << " ";
+        // } 
     }
-   cout << "Min value is" << prev[str1_size - 1] << endl;
-    return (prev[str1_size - 1] < d);
+    // for (auto c : previous) {
+    //         cout << c << " ";
+    // } 
+    // cout << endl;
+    // cout << "Current val is: " << previous[column - 1] << endl;
+    return previous[column - 1] <= d; 
 }
 
 void load_words(set<string> & word_list, const string& file_name) {
-    
+    ifstream in(file_name);
+    for (string word; (in >> word);) {
+        word_list.insert(word);
+    }
+}
+
+
+void print_word_ladder(const vector<string>& ladder) {
+    if (ladder.size() == 0) cout << "Empty Ladder" << endl;
+    else {
+        for (string word: ladder) {
+            cout << word << " ";
+        }
+    }
+}
+
+#define my_assert(e) {cout << #e << ((e) ? " passed": "failed") << endl;}
+void verify_word_ladder(){
+    set<string> word_list;
+    load_words(word_list, "src/words.txt");
+    // cout << "IS EMpty" << word_list.empty() << endl;
+    vector<string> test1= generate_word_ladder("cat", "dog", word_list);
+    my_assert((test1).size() == 4);
+    // cout << "Size is" << test1.size() << endl;
+    // for (auto c : test1) {
+    //     cout << c  << endl;
+    // }
+    // cout << word_list[0] << endl;
+    // print_word_ladder(word_list);
+    my_assert(generate_word_ladder("marty", "curls", word_list).size() == 6);
+    my_assert(generate_word_ladder("code", "data", word_list).size() == 6);
+    my_assert(generate_word_ladder("work", "play", word_list).size() == 6);
+    my_assert(generate_word_ladder("sleep", "awake", word_list).size() == 8);
+    my_assert(generate_word_ladder("car", "cheat", word_list).size() == 4);
 }
