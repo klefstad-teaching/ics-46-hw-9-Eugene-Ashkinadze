@@ -105,6 +105,10 @@ void print_word_ladder(const vector<string>& ladder) {
     }
 }
 
+void error(string word1, string word2, string msg) {
+    cerr << word1 << word1 << msg << endl;
+}
+
 #define my_assert(e) {cout << #e << ((e) ? " passed": "failed") << endl;}
 void verify_word_ladder(){
     set<string> word_list;
