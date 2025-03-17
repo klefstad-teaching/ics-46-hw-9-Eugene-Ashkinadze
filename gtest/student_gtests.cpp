@@ -9,8 +9,8 @@ TEST(test_is_adjacentAAA, Same_Values) {
   string word1 = "appl";
   string word2 = "apple";
   cout << word1 << endl;
-  cout << "Value is: " << (is_adjacent(word1,word2)) << endl;
-  EXPECT_FALSE(is_adjacent(word1,word2));
+  // cout << "Value is: " << (is_adjacent(word1,word2)) << endl;
+  EXPECT_TRUE(is_adjacent(word1,word2));
 }
 
 // TEST(test_is_adjacent, Too_Large) {

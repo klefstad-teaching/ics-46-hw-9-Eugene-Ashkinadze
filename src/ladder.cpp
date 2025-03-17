@@ -50,7 +50,7 @@ bool is_adjacent(const string& word1, const string& word2) {
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d){
     int column = str1.size() + 1;
     int row = str2.size() + 1;
-    if (abs(column - row) >= d) return false;
+    if (abs(column - row) > d) return false;
     vector<int> previous(column);
     int current;
     for (int size = 0; size < column; ++size) {
@@ -62,6 +62,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
     for (int i = 1; i < row; ++i) {
         for (int j = 0; j < column; ++j) {
             if (j == 0) {
+                previous[column - 1] = current;
                 current = previous[j] + 1;
                 // cout << current << " ";
                 continue;
@@ -85,7 +86,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
         // swap(current, previous);
     }
     // cout << "Val: " << current << endl;
-    return current <= d; 
+    return (current <= d); 
 }
 
 void load_words(set<string> & word_list, const string& file_name) {
