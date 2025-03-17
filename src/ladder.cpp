@@ -85,7 +85,7 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
         // swap(current, previous);
     }
     // cout << "Val: " << current << endl;
-    return current <= d; 
+    return current < d; 
 }
 
 void load_words(set<string> & word_list, const string& file_name) {

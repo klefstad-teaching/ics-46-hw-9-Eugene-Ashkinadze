@@ -5,13 +5,13 @@
 #include "ladder.h"
 using namespace std;
 
-// TEST(test_is_adjacentAAA, Same_Values) {
-//   string word1 = "aaa";
-//   string word2 = "atttt";
-//   cout << word1 << endl;
-//   cout << "Value is: " << (is_adjacent(word1,word2)) << endl;
-//   EXPECT_FALSE(is_adjacent(word1,word2));
-// }
+TEST(test_is_adjacentAAA, Same_Values) {
+  string word1 = "appl";
+  string word2 = "apple";
+  cout << word1 << endl;
+  cout << "Value is: " << (is_adjacent(word1,word2)) << endl;
+  EXPECT_FALSE(is_adjacent(word1,word2));
+}
 
 // TEST(test_is_adjacent, Too_Large) {
 //   string word1 = "aaa";
@@ -21,19 +21,19 @@ using namespace std;
 //   EXPECT_TRUE(is_adjacent(word1,word2));
 // }
 
-TEST(test_is_adjacent_alt, Alt_Valueas) {
-  string word1 = "cat";
-  string word2 = "ito";
-  cout << word1 << endl;
-  cout << "Value is: " << (is_adjacent(word1,word2)) << endl;
-  // EXPECT_TRUE(is_adjacent(word1,word2));
-}
+// TEST(test_is_adjacent_alt, Alt_Valueas) {
+//   string word1 = "cat";
+//   string word2 = "ito";
+//   cout << word1 << endl;
+//   cout << "Value is: " << (is_adjacent(word1,word2)) << endl;
+//   // EXPECT_TRUE(is_adjacent(word1,word2));
+// }
 
-TEST(test_verify, multiple_tests) {
-  verify_word_ladder();
-  // cout << "Value is: " << (is_adjacent(word1,word2)) << endl;
-  EXPECT_TRUE(true);
-}
+// TEST(test_verify, multiple_tests) {
+//   verify_word_ladder();
+//   // cout << "Value is: " << (is_adjacent(word1,word2)) << endl;
+//   EXPECT_TRUE(true);
+// }
 
 // TEST(test_is_adjacent_alt, Alt_Values) {
 //   string word1 = "abc";
